@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/; font-src https://fonts.gstatic.com/; img-src *;"
+        />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+        <title>MiniMailer Updater</title>
+        <style>
+            :root {
+                --white: #ffffff;
+                --dark: #18181b;
+                --highlight: #1f9aff;
+                --gray: #99aab5;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            html,
+            body,
+            main {
+                height: 100%;
+                width: 100%;
+            }
+
+            main {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                font-family: "Poppins", sans-serif;
+                background-color: var(--dark);
+                color: var(--white);
+                text-align: center;
+                -webkit-app-region: drag;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+
+            .hidden {
+                visibility: hidden;
+                display: none;
+            }
+
+            progress {
+                height: 7px;
+                background-color: var(--gray);
+                appearance: none;
+                color: var(--highlight) !important;
+                border-radius: 10px;
+            }
+
+            progress::-webkit-progress-bar {
+                height: 7px;
+                background-color: var(--gray);
+                border-radius: 10px;
+            }
+
+            progress::-moz-progress-bar {
+                height: 7px;
+                -moz-appearance: none;
+                background-color: var(--highlight) !important;
+                border-radius: 10px;
+            }
+
+            progress::-webkit-progress-value {
+                height: 7px;
+                -webkit-appearance: none;
+                background-color: var(--highlight) !important;
+                border-radius: 10px;
+            }
+
+            main > * {
+                max-width: 80%;
+            }
+
+            .highlight {
+                color: var(--highlight);
+            }
+
+            .dim {
+                opacity: 0.6;
+            }
+
+            .dim progress {
+                opacity: 1;
+            }
+
+            .center {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+    </head>
+
+    <body>
+        <main>
+            <div class="center dim">
+                <svg
+                    style="width: 100px; height: 100px"
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path fill="none" d="M0 0h24v24H0z"></path>
+                    <path
+                        d="M19.35 10.04A7.49 7.49 0 0012 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 000 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"
+                    ></path>
+                </svg>
+            </div>
+            <h1 class="highlight">MiniMailer</h1>
+            <h3 id="version" class="hidden">Version: 0.0.0</h3>
+            <p id="status" class="dim">Loading...</p>
+        </main>
+    </body>
+</html>
