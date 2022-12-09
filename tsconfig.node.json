@@ -29,6 +29,6 @@
     },
     "include": [
         "./src/minimailer",
-        "global.d.ts"
+        "./global.d.ts"
     ]
 }

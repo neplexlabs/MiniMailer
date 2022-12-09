@@ -1,16 +1,23 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-contextBridge.exposeInMainWorld("MiniMailer", {
-    send(channel: string, ...data: any[]) {
+const MiniMailerContext = {
+    send<K extends keyof MailerCommandsIncoming>(
+        channel: K,
+        ...data: Parameters<OmitFirstArg<MailerCommandsIncoming[K]>>
+    ) {
         ipcRenderer.send(channel, ...data);
     },
-    receive(channel: string, handler: (...args: any[]) => any) {
-        ipcRenderer.on(channel, handler);
+    receive<K extends keyof MailerCommandsOutgoing>(channel: K, handler: MailerCommandsOutgoing[K]) {
+        ipcRenderer.on(channel, handler as any);
     },
-    receiveOnce(channel: string, handler: (...args: any[]) => any) {
-        ipcRenderer.once(channel, handler);
+    receiveOnce<K extends keyof MailerCommandsOutgoing>(channel: K, handler: MailerCommandsOutgoing[K]) {
+        ipcRenderer.once(channel, handler as any);
     },
-    close(channel: string, handler: (...args: any[]) => any) {
+    close<K extends keyof MailerCommandsOutgoing>(channel: K, handler: MailerCommandsOutgoing[K]) {
         ipcRenderer.off(channel, handler);
     }
-});
+};
+
+export type IMiniMailerContext = typeof MiniMailerContext;
+
+contextBridge.exposeInMainWorld("MiniMailer", MiniMailerContext);

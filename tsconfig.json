@@ -38,7 +38,8 @@
     "include": [
         "src/renderer",
         "dist",
-        "global.d.ts"
+        "src/global.d.ts",
+        "./global.d.ts"
     ],
     "references": [
         {
