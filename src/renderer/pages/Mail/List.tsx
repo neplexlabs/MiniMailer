@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useReceiver } from "../../hooks/useReceiver";
 import { useSender } from "../../hooks/useSender";
 import { VscArrowLeft } from "react-icons/vsc";
+import sanitizeHtml from "sanitize-html";
 
 interface MailListCardProps {
     title: string;
@@ -83,9 +84,15 @@ export function MailRenderer(props: MailRendererProps) {
                     To: {Array.isArray(mail.to) ? mail.to.map((m, i) => <Text key={i}>{m.text}</Text>) : mail.to.text}
                 </Text>
             ) : null}
-            <Text className="mt-4">
-                <pre>{mail.html || mail.text || ""}</pre>
-            </Text>
+            <Text
+                className="mt-4"
+                dangerouslySetInnerHTML={{
+                    __html: sanitizeHtml(mail.html || mail.text || "", {
+                        allowVulnerableTags: false,
+                        allowIframeRelativeUrls: false
+                    })
+                }}
+            ></Text>
         </Container>
     );
 }
