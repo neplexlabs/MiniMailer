@@ -55,7 +55,10 @@ export class MiniMailer {
 
     public startSmtpServer(data: SMTPStartPayload) {
         if (this.smtp) return;
-        this.smtp = createSMTPServer(data);
+        this.smtp = createSMTPServer({
+            ...data,
+            app: this
+        });
         this.smtp.server.on("error", (err) => {
             this.send("smtp-error", `${err}`);
             this.stopSmtpServer();

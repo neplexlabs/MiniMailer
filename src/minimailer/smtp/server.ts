@@ -1,12 +1,13 @@
 import { randomUUID } from "crypto";
 import { SMTPServer, SMTPServerDataStream } from "smtp-server";
-import { ParsedMail, simpleParser } from "mailparser";
+import { simpleParser } from "mailparser";
 import { MailError } from "./MailError";
+import { MiniMailer } from "../MiniMailer";
 
 const SERVER_PORT = 50478 as const;
 
 function createMessage(stream: SMTPServerDataStream) {
-    return new Promise<ParsedMail>((resolve, reject) => {
+    return new Promise<import("mailparser").ParsedMail>((resolve, reject) => {
         stream.on("error", (err) => {
             reject(err);
         });
@@ -28,12 +29,12 @@ function createMessage(stream: SMTPServerDataStream) {
 interface ServerInfo {
     port: number;
     server: SMTPServer;
-    mails: Map<string, ParsedMail>;
+    mails: Array<ParsedMail>;
 }
 
-export function createSMTPServer(data: SMTPStartPayload) {
-    const { username, password, port } = data;
-    const mailStore = new Map<string, ParsedMail>();
+export function createSMTPServer(data: SMTPStartPayload & { app: MiniMailer }) {
+    const { username, password, port, app } = data;
+    const mailStore = new Array<ParsedMail>();
     const server = new SMTPServer({
         authOptional: !(!!username || !!password),
         disabledCommands: ["AUTH", "STARTTLS"],
@@ -55,7 +56,12 @@ export function createSMTPServer(data: SMTPStartPayload) {
             createMessage(stream).then(
                 (mail) => {
                     callback(null);
-                    mailStore.set(randomUUID(), mail);
+                    const uuid = randomUUID();
+                    mailStore.unshift({
+                        ...mail,
+                        id: uuid
+                    });
+                    app.send("mails", [...mailStore.values()]);
                 },
                 (e) => callback(e || new MailError("failed to parse email"))
             );

@@ -12,16 +12,13 @@ export function createIpcHandler(app: MiniMailer) {
 
     ipcMain.on("get-mails", () => {
         if (!app.smtp) return app.send("mails", []);
-        const mails = [...app.smtp.mails.entries()].map(([i, v]) => ({
-            id: i,
-            ...v
-        }));
+        const mails = [...app.smtp.mails.values()];
 
         app.send("mails", mails);
     });
 
     ipcMain.on("get-mail", (_, id: string) => {
-        const mail = app.smtp?.mails.get(id);
+        const mail = app.smtp?.mails.find((r) => r.id === id);
         return app.send("mail", mail || null);
     });
 }

@@ -55,7 +55,7 @@ export default function Dashboard() {
     };
 
     return (
-        <Container maxW="container.sm" p="3">
+        <Container w="sm" rounded={"md"} p="3" bg="whitesmoke">
             {error ? (
                 <Alert status="error" variant="left-accent">
                     <AlertIcon />
@@ -65,11 +65,11 @@ export default function Dashboard() {
             <Text fontSize="xl">SMTP Settings</Text>
             <FormControl isDisabled={isRunning}>
                 <FormLabel>SMTP Port</FormLabel>
-                <Input ref={portRef} type="number" min={1024} max={65535} placeholder="Custom SMTP port" />
+                <Input bg="white" ref={portRef} type="number" min={1024} max={65535} placeholder="Custom SMTP port" />
                 <FormLabel>Authentication Username</FormLabel>
-                <Input ref={usernameRef} type="text" placeholder="Leave empty for no username check" />
+                <Input bg="white" ref={usernameRef} type="text" placeholder="Leave empty for no username check" />
                 <FormLabel>Authentication Password</FormLabel>
-                <Input ref={passwordRef} type="text" placeholder="Leave empty for no password check" />
+                <Input bg="white" ref={passwordRef} type="text" placeholder="Leave empty for no password check" />
                 <Button onClick={handleSubmit} variant="solid" colorScheme="teal" className="w-full mt-3">
                     {isRunning ? "Stop" : "Start"} SMTP Server
                 </Button>

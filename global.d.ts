@@ -1,4 +1,4 @@
-import type { ParsedMail } from "mailparser";
+import type { ParsedMail as MpParsedMail } from "mailparser";
 
 declare global {
     type ICommandCallback<T> = (event: Electron.IpcRendererEvent, ...args: T) => any;
@@ -6,7 +6,8 @@ declare global {
 
     type OmitFirstArg<F> = F extends (x: any, ...args: infer P) => infer R ? (...args: P) => R : never;
 
-    type ParsedMailArray = (ParsedMail & { id: string })[];
+    type ParsedMail = MpParsedMail & { id: string };
+    type ParsedMailArray = ParsedMail[];
 
     interface SMTPStartPayload {
         username?: string;
