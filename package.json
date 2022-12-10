@@ -10,7 +10,7 @@
     "dev:ui": "vite",
     "build": "run-s build:*",
     "build:ui": "vite build --base=./",
-    "build:electron": "rimraf app && tsc --p tsconfig.node.json && npm run copy-files && electron-builder --config=build.js",
+    "build:electron": "rimraf app && tsc --p tsconfig.node.json && npm run copy-files",
     "deploy": "electron-builder --config=build.js --publish=always",
     "start": "electron .",
     "format": "prettier --write \"./*.{ts,js}\" \"./src/**/*.{js,ts,jsx,tsx,html}\""
