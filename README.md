@@ -1,2 +1,5 @@
 # MiniMailer
-A cross platform desktop app to test/debug email notifications of your application
+
+A cross platform desktop app to test email notifications of your application.
+
+# This project is currently a work in progress
