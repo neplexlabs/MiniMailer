@@ -1,3 +1,10 @@
+import { Box } from "@chakra-ui/react";
+import Dashboard from "./pages/Dashboard";
+
 export default function App() {
-    return <h1 className="text-2xl font-medium">Welcome to MiniMailer</h1>;
+    return (
+        <Box className="select-none">
+            <Dashboard />
+        </Box>
+    );
 }

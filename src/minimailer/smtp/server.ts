@@ -31,18 +31,25 @@ interface ServerInfo {
     mails: Map<string, ParsedMail>;
 }
 
-export function createSMTPServer() {
+export function createSMTPServer(data: SMTPStartPayload) {
+    const { username, password, port } = data;
     const mailStore = new Map<string, ParsedMail>();
     const server = new SMTPServer({
-        authOptional: true,
+        authOptional: !(!!username || !!password),
         disabledCommands: ["AUTH", "STARTTLS"],
         authMethods: ["PLAIN", "LOGIN", "CRAM-MD5"],
         size: 50 * 1024 * 1024,
         hidePIPELINING: true,
         onAuth(auth, session, callback) {
-            callback(null, {
-                user: randomUUID()
-            });
+            if (username && auth.username !== username) {
+                callback(new MailError("Invalid username"));
+            } else if (password && auth.password !== password) {
+                callback(new MailError("Invalid password"));
+            } else {
+                callback(null, {
+                    user: randomUUID()
+                });
+            }
         },
         onData(stream, session, callback) {
             createMessage(stream).then(
@@ -56,7 +63,7 @@ export function createSMTPServer() {
     });
 
     return {
-        port: SERVER_PORT,
+        port: port ?? SERVER_PORT,
         server,
         mails: mailStore
     } as ServerInfo;

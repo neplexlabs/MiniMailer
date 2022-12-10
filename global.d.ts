@@ -8,17 +8,29 @@ declare global {
 
     type ParsedMailArray = (ParsedMail & { id: string })[];
 
+    interface SMTPStartPayload {
+        username?: string;
+        password?: string;
+        port?: number;
+    }
+
+    interface SMTPServerInfo {
+        port: number;
+    }
+
     interface MailerCommandsIncoming {
         "get-mails": ICommandCallback<[]>;
         "get-mail": ICommandCallback<[string]>;
-        "start-smtp": ICommandCallback<[]>;
+        "start-smtp": ICommandCallback<[SMTPStartPayload]>;
         "stop-smtp": ICommandCallback<[]>;
     }
 
     interface MailerCommandsOutgoing {
         mails: OCommandCallback<[ParsedMailArray]>;
-        "smtp-started": OCommandCallback<[{ port: number }]>;
-        "smtp-stopped": OCommandCallback<[]>;
+        mail: OCommandCallback<[ParsedMail | null]>;
+        "smtp-started": OCommandCallback<[SMTPServerInfo]>;
+        "smtp-closed": OCommandCallback<[]>;
+        "smtp-error": OCommandCallback<[string]>;
     }
 }
 

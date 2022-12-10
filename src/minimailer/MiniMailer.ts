@@ -42,22 +42,45 @@ export class MiniMailer {
 
     public stopSmtpServer() {
         if (!this.smtp) return;
-        this.smtp.server.close(() => {
-            this.send("smtp-closed");
-        });
-    }
-
-    public startSmtpServer() {
-        if (this.smtp) return;
-        this.smtp = createSMTPServer();
-        this.smtp.server.listen(this.smtp.port, () => {
-            this.send("smtp-started", {
-                port: this.smtp!.port
+        try {
+            this.smtp.server.close(() => {
+                this.send("smtp-closed");
+                this.smtp = null;
             });
-        });
+        } catch {
+            this.send("smtp-closed");
+            this.smtp = null;
+        }
     }
 
-    public send(channel: string, ...data: any[]) {
+    public startSmtpServer(data: SMTPStartPayload) {
+        if (this.smtp) return;
+        this.smtp = createSMTPServer(data);
+        this.smtp.server.on("error", (err) => {
+            this.send("smtp-error", `${err}`);
+            this.stopSmtpServer();
+        });
+        this.smtp.server.on("close", () => {
+            this.send("smtp-closed");
+            if (this.smtp) this.smtp = null;
+        });
+
+        try {
+            this.smtp.server.listen(this.smtp.port, () => {
+                this.send("smtp-started", {
+                    port: this.smtp!.port
+                });
+            });
+        } catch (e) {
+            this.stopSmtpServer();
+            this.send("smtp-error", `${e}`);
+        }
+    }
+
+    public send<K extends keyof MailerCommandsOutgoing>(
+        channel: K,
+        ...data: Parameters<OmitFirstArg<MailerCommandsOutgoing[K]>>
+    ) {
         this.window.webContents.send(channel, ...data);
     }
 }

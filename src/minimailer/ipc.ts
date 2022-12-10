@@ -2,8 +2,8 @@ import { ipcMain } from "electron";
 import { MiniMailer } from "./MiniMailer";
 
 export function createIpcHandler(app: MiniMailer) {
-    ipcMain.on("start-smtp", () => {
-        app.startSmtpServer();
+    ipcMain.on("start-smtp", (_, data: SMTPStartPayload) => {
+        app.startSmtpServer(data);
     });
 
     ipcMain.on("stop-smtp", () => {
