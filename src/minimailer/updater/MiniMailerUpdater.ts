@@ -31,9 +31,6 @@ export class MiniMailerUpdater {
     public check() {
         if (isDev) return Promise.resolve(false);
         return new Promise<boolean>(async (resolve) => {
-            const updateInfo = await this.updater.checkForUpdates().catch(() => null);
-            if (!updateInfo) return resolve(false);
-
             this.updater.on("update-not-available", () => {
                 resolve(false);
             });
@@ -71,6 +68,9 @@ export class MiniMailerUpdater {
                 this.window?.webContents.send("error", `Error updating app:\n\n${err}`);
                 resolve(false);
             });
+
+            const updateInfo = await this.updater.checkForUpdates().catch(() => null);
+            if (!updateInfo) return resolve(false);
         });
     }
 
