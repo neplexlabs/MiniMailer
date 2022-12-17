@@ -76,7 +76,10 @@ export class MiniMailerUpdater {
 
     public stop() {
         try {
-            if (this.window) this.window.destroy();
+            if (this.window) {
+                this.window.setProgressBar(-1);
+                this.window.destroy();
+            }
             this.window = null;
         } catch {
             this.window = null;
