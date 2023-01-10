@@ -43,14 +43,14 @@ export function createSMTPServer(data: SMTPStartPayload & { app: MiniMailer }) {
         hidePIPELINING: true,
         onAuth(auth, session, callback) {
             if (username && auth.username !== username) {
-                callback(new MailError("Invalid username"));
-            } else if (password && auth.password !== password) {
-                callback(new MailError("Invalid password"));
-            } else {
-                callback(null, {
-                    user: randomUUID()
-                });
+                return callback(new MailError("Invalid username"));
             }
+            if (password && auth.password !== password) {
+                return callback(new MailError("Invalid password"));
+            }
+            callback(null, {
+                user: randomUUID()
+            });
         },
         onData(stream, session, callback) {
             createMessage(stream).then(
