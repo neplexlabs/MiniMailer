@@ -1,3 +1,7 @@
+# This project has been archived. Please use [Yasumu](https://github.com/neplextech/yasumu) instead.
+
+---
+
 # MiniMailer
 
 A cross platform desktop app to test email notifications of your application.
